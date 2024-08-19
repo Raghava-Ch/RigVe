@@ -1,0 +1,93 @@
+{
+  "name": "rigve",
+  "displayName": "RigVe",
+  "description": "code visualizer",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.76.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./dist/extension.js",
+  "repository": "https://github.com/Raghava-Ch/RigVe",
+  "contributes": {
+    "commands": [
+      {
+        "command": "RigVe.setPath",
+        "title": "Set Root Directory",
+        "category": "RigVe"
+      },
+      {
+        "command": "RigVe.sequence",
+        "title": "Open Sequence",
+        "category": "RigVe"
+      },
+      {
+        "command": "RigVe.nsDiagram",
+        "title": "Open NS Diagram",
+        "category": "RigVe"
+      },
+      {
+        "command": "RigVe.depDiagram",
+        "title": "Open Depandancies",
+        "category": "RigVe"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "RigVe.sequence",
+          "when": "resourceLangId == c",
+          "group": "Vnavigation"
+        },
+        {
+          "command": "RigVe.nsDiagram",
+          "when": "resourceLangId == c",
+          "group": "Vnavigation"
+        },
+        {
+          "command": "RigVe.depDiagram",
+          "when": "resourceLangId == c",
+          "group": "Vnavigation"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "webpack",
+    "watch": "webpack --watch",
+    "package": "webpack --mode production --devtool hidden-source-map",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "npm run compile-tests && npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.21.3",
+    "@babel/preset-env": "^7.20.2",
+    "@babel/preset-react": "^7.18.6",
+    "@types/glob": "^8.1.0",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "16.x",
+    "@types/vscode": "^1.76.0",
+    "@typescript-eslint/eslint-plugin": "^5.53.0",
+    "@typescript-eslint/parser": "^5.53.0",
+    "@vscode/test-electron": "^2.2.3",
+    "axios": "^1.3.4",
+    "babel-loader": "^9.1.2",
+    "eslint": "^8.34.0",
+    "glob": "^8.1.0",
+    "mocha": "^10.2.0",
+    "ts-loader": "^9.4.2",
+    "typescript": "^4.9.5",
+    "webpack": "^5.76.1",
+    "webpack-cli": "^5.0.2"
+  },
+  "dependencies": {
+    "@vscode/vsce": "^2.22.0"
+  }
+}

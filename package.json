@@ -3,6 +3,8 @@
   "displayName": "RigVe",
   "description": "code visualizer",
   "version": "0.0.1",
+  "publisher": "RigVe-tools",
+  "icon": "images/logo.png",
   "engines": {
     "vscode": "^1.76.0"
   },

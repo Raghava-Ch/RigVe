@@ -2,7 +2,7 @@
   "name": "rigve",
   "displayName": "RigVe",
   "description": "code visualizer",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "publisher": "RigVe-tools",
   "icon": "images/logo.png",
   "engines": {
@@ -87,7 +87,7 @@
     "ts-loader": "^9.4.2",
     "typescript": "^4.9.5",
     "webpack": "^5.76.1",
-    "webpack-cli": "^5.0.2"
+    "webpack-cli": "^5.1.4"
   },
   "dependencies": {
     "@vscode/vsce": "^2.22.0"

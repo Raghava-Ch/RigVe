@@ -50,9 +50,12 @@ const sleep = (delay: number) => new Promise((resolve) => setTimeout(resolve, de
 async function performTaskWithProgressBar(msg: any) {
     await vscode.window.withProgress({
         location: vscode.ProgressLocation.Notification, // Location of the progress bar
-        title: 'Compilation in Progress', // Title of the progress bar
-        cancellable: false // Whether the progress bar can be cancelled
+        title: 'Indexing in Progress', // Title of the progress bar
+        cancellable: true // Whether the progress bar can be cancelled
     }, async (progress, token) => {
+        token.onCancellationRequested(() => {
+            vscode.window.showInformationMessage('Indexing will be continiued background');
+        });
         // This function will run asynchronously and can report progress to the progress bar
         let pValue = 0;
         // Perform your task here
@@ -74,7 +77,7 @@ async function performTaskWithProgressBar(msg: any) {
             // Report progress to the progress bar
             progress.report({ increment: 1, message: `${pValue}%` });
             // Check if the operation is cancelled by the user
-            if (token.isCancellationRequested || pValue > 98) {
+            if (token.isCancellationRequested || pValue > 99) {
                 // Perform cleanup or handle cancellation logic
                 break;
             }
@@ -82,7 +85,7 @@ async function performTaskWithProgressBar(msg: any) {
         
         // Task completed
         running = false;
-        return new Promise(resolve => resolve('Compilation completed'));
+        return new Promise(resolve => resolve('Indexing completed'));
     });
 }
 
@@ -103,14 +106,14 @@ async function processTheCommand() {
         else if (message[0].command === 'OpenNSD') {
             handleNSDOption(message[0].data.def_file, message[0].data.fun_name);
         }
-        // else if (message[0].command === 'Notification_Progress' && running === false) {
-        //     running = true;
-        //     performTaskWithProgressBar(message[0]).then(result => {
-        //         vscode.window.showInformationMessage(`Compilation completed`);
-        //     }).catch(error => {
-        //         vscode.window.showErrorMessage(`Task failed: ${error}`);
-        //     });
-        // }
+        else if (message[0].command === 'Notification_Progress' && running === false) {
+            running = true;
+            performTaskWithProgressBar(message[0]).then(result => {
+                vscode.window.showInformationMessage(`Compilation completed`);
+            }).catch(error => {
+                vscode.window.showErrorMessage(`Task failed: ${error}`);
+            });
+        }
     } catch (error) {
         // handle error
         console.error(error);
@@ -132,6 +135,6 @@ export function stopTimer() {
     if (timerInterval) {
         clearInterval(timerInterval);
         timerInterval = undefined;
-        vscode.window.showInformationMessage('Timer stopped.');
+        // vscode.window.showInformationMessage('Timer stopped.');
     }
 }

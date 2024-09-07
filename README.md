@@ -89,10 +89,10 @@ Untill then follow video the channel in [YOUTUBE 📹 ](https://www.youtube.com/
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## 💡 Good to Know
-This release is meant for **review** purposes. You may review it on your YouTube channel, share your opinions on social media, or any other platform you wish. Current release of the tool will work with C Language projects.
+This release is meant for **review** purposes. You may review it on your YouTube channel, share your opinions on social media, or any other platform you wish. Current release of the tool will work with C Language projects. You may use it in your project, as the tool is in a pre-alpha state. Take a backup of your project’s source code and use the tool to better understand your code.
 
 ### Data Security:
-This tool is not designed to collect data such as diagnostics, test results, crash reports, or personal identification. In other words, it should work on a local network of the computer. Connecting to the internet is considered tampering or may indicate a bug—please report issues in the [repo](https://github.com/Raghava-Ch/RigVe/issues). Rest assured, all your data is processed in your personal environment safely.
+This tool is not designed to collect data such as diagnostics, test results, crash reports, or personal identification. In other words, it should work on a local network of the computer. Connecting to the internet is considered tampering or may indicate a bug—please report issues in the [repo](https://github.com/Raghava-Ch/RigVe/issues). Rest assured, all your data is processed in your personal environment safely. In windows OS it may ask the network permissions but don't worry, It happens becuse the tool is designed with client server architecutere and uses for the local host communications only.
 
 ### Usage Rights:
 You may use this tool for any type of work—commercial, corporate, personal, community, or freelance.

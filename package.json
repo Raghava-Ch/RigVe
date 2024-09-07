@@ -2,7 +2,7 @@
   "name": "rigve",
   "displayName": "RigVe",
   "description": "code visualizer",
-  "version": "0.0.2",
+  "version": "0.0.22",
   "publisher": "RigVe-tools",
   "icon": "images/logo.png",
   "engines": {

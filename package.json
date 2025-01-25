@@ -1,95 +1,70 @@
 {
   "name": "rigve",
-  "displayName": "RigVe",
-  "description": "code visualizer",
-  "version": "0.0.22",
-  "publisher": "RigVe-tools",
-  "icon": "images/logo.png",
+  "displayName": "rigve",
+  "description": "",
+  "version": "0.0.1",
   "engines": {
-    "vscode": "^1.76.0"
+    "vscode": "^1.96.0"
   },
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
-  "main": "./dist/extension.js",
-  "repository": "https://github.com/Raghava-Ch/RigVe",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
   "contributes": {
     "commands": [
-      {
-        "command": "RigVe.setPath",
-        "title": "Set Root Directory",
-        "category": "RigVe"
-      },
-      {
-        "command": "RigVe.sequence",
-        "title": "Open Sequence",
-        "category": "RigVe"
-      },
       {
         "command": "RigVe.nsDiagram",
         "title": "Open NS Diagram",
         "category": "RigVe"
-      },
-      {
-        "command": "RigVe.depDiagram",
-        "title": "Open Depandancies",
-        "category": "RigVe"
       }
     ],
+    "configuration": {
+      "title": "RigVe",
+      "properties": {
+        "RigVe.serverLocation": {
+          "type": "string",
+          "default": "**/",
+          "description": "Provide rigve server location"
+        }
+      }
+    },
     "menus": {
       "editor/context": [
         {
-          "command": "RigVe.sequence",
-          "when": "resourceLangId == c",
-          "group": "Vnavigation"
-        },
-        {
           "command": "RigVe.nsDiagram",
-          "when": "resourceLangId == c",
-          "group": "Vnavigation"
-        },
-        {
-          "command": "RigVe.depDiagram",
-          "when": "resourceLangId == c",
+          "when": "resourceLangId == c || resourceLangId == java",
           "group": "Vnavigation"
         }
       ]
     }
   },
   "scripts": {
-    "vscode:prepublish": "npm run package",
-    "compile": "webpack",
-    "watch": "webpack --watch",
-    "package": "webpack --mode production --devtool hidden-source-map",
-    "compile-tests": "tsc -p . --outDir out",
-    "watch-tests": "tsc -p . -w --outDir out",
-    "pretest": "npm run compile-tests && npm run compile && npm run lint",
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
     "test": "node ./out/test/runTest.js"
   },
   "devDependencies": {
-    "@babel/core": "^7.21.3",
-    "@babel/preset-env": "^7.20.2",
-    "@babel/preset-react": "^7.18.6",
-    "@types/glob": "^8.1.0",
     "@types/mocha": "^10.0.1",
-    "@types/node": "16.x",
-    "@types/vscode": "^1.76.0",
-    "@typescript-eslint/eslint-plugin": "^5.53.0",
-    "@typescript-eslint/parser": "^5.53.0",
-    "@vscode/test-electron": "^2.2.3",
-    "axios": "^1.3.4",
-    "babel-loader": "^9.1.2",
-    "eslint": "^8.34.0",
-    "glob": "^8.1.0",
+    "@types/node": "^22.10.2",
+    "@types/vscode": "^1.96.0",
+    "@typescript-eslint/eslint-plugin": "8.18.1",
+    "@typescript-eslint/parser": "8.18.1",
+    "@vscode/test-electron": "^2.3.4",
+    "eslint": "9.17.0",
+    "glob": "11.0.0",
     "mocha": "^10.2.0",
-    "ts-loader": "^9.4.2",
-    "typescript": "^4.9.5",
-    "webpack": "^5.76.1",
-    "webpack-cli": "^5.1.4"
+    "typescript": "5.7.2"
   },
   "dependencies": {
-    "@vscode/vsce": "^2.22.0"
+    "@trpc/client": "^10.45.2",
+    "@trpc/server": "^10.45.2",
+    "node-fetch": "^3.3.2",
+    "zod": "^3.24.1"
   }
 }

@@ -1,156 +1,117 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from "vscode";
-import axios from "axios";
-import path = require("path");
-import {startTimer, stopTimer} from "./timer";
+import * as path from "path";
 import {
-  getRootDirPath,
-  getFilePath,
-  getWebviewContent
+    getRootDirPath,
 } from "./utilities";
-import {handleNSDOption} from './nsd';
+import { handleNSDOption } from "./nsd";
+import { trpc } from "./lib/trpc/client";
 
-function handleSequenceOption() {
+let serverCheckInterval: NodeJS.Timeout | undefined;
 
-  const activeEditor = vscode.window.activeTextEditor;
-  let filPath: string = "", funName: string = "";
-  if (activeEditor) {
-      // Implement the logic for your custom option here
-      let editor = vscode.window.activeTextEditor;
-      if (!editor) {
-          return;
-      }
-      const fileName = path.basename(activeEditor.document.fileName);
-      let selection = activeEditor.selection;
-      let start = selection.start;
-      let end = selection.end;
-      // Get the text at the cursor position
-      let fnName = funName === "" ? editor.document.getText(
-          new vscode.Range(start, end)
-      ) : funName;
-      const panel = vscode.window.createWebviewPanel(
-          "RigVe",
-          fnName,
-          vscode.ViewColumn.One,
-          { enableScripts: true }
-      );
-
-      let rootPath = getRootDirPath();
-      let filePath = filPath === "" ? getFilePath() : filPath;
-
-      if (rootPath !== undefined) {
-          panel.webview.html = getWebviewContent("sequence", rootPath, filePath, fnName);
-      }
-  }
-  else {
-    vscode.window.showInformationMessage('Please select the function name');
-  }
-}
-
-
-function handleDepandanciesOption() {
-  // Implement the logic for your custom option here
-  let editor = vscode.window.activeTextEditor;
-  if (!editor) {
-    return;
-  }
-  // Get the current selection range
-  let selection = editor.selection;
-  let start = selection.start;
-  let end = selection.end;
-  // Get the text at the cursor position
-  let fnName: string = "";
-  const activeEditor = vscode.window.activeTextEditor;
-  if (activeEditor) {
-    const fileName = path.basename(activeEditor.document.fileName);
-    let selection = activeEditor.selection;
-    let start = selection.start;
-    let end = selection.end;
-    // Get the text at the cursor position
-    let fnName = editor.document.getText(
-      new vscode.Range(start, end)
-    );
-    const panel = vscode.window.createWebviewPanel(
-      "RigVe",
-      fileName,
-      vscode.ViewColumn.One,
-      { enableScripts: true }
-    );
-
-    let rootPath = getRootDirPath();
-    let filePath = getFilePath();
-
-    if (rootPath !== undefined) {
-      // Set the HTML content of the panel to your Next.js app URL
-
-      panel.webview.html = getWebviewContent("dependancy", rootPath, filePath, "");
+async function checkServerStatus(): Promise<boolean> {
+    try {
+        await trpc.health.query();
+        return true;
+    } catch (error) {
+        return false;
     }
-  }
 }
 
-let disposable: vscode.Disposable;
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
-export function activate(context: vscode.ExtensionContext) {
-
-  startTimer();
-
-  	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-  disposable = vscode.commands.registerCommand(
-    "RigVe.setPath",
-    setRootDirectory
-  );
-
-  context.subscriptions.push(disposable);
-
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-  // Register the onDidOpenTextDocument event
-
-  let disposable2 = vscode.commands.registerCommand(
-    "RigVe.sequence",
-    handleSequenceOption
-  );
-  context.subscriptions.push(disposable2);
-
-  let disposable3 = vscode.commands.registerCommand(
-    "RigVe.nsDiagram",
-    () => {handleNSDOption("", "");}
-  );
-  context.subscriptions.push(disposable3);
-
-  let disposable4 = vscode.commands.registerCommand(
-    "RigVe.depDiagram",
-    handleDepandanciesOption
-  );
-  context.subscriptions.push(disposable4);
-
-  // Register the "extension.stopTimer" command
-  context.subscriptions.push(
-    vscode.commands.registerCommand('extension.stopTimer', stopTimer)
-);
+function startServerStatusMonitoring(runButton: vscode.StatusBarItem) {
+    // if (serverCheckInterval) {
+    //     clearInterval(serverCheckInterval);
+    // }
+    
+    serverCheckInterval = setInterval(async () => {
+        const isRunning = await checkServerStatus();
+        if (!isRunning) {
+            runButton.text = "$(stop) RigVe Offline";
+            runButton.backgroundColor = new vscode.ThemeColor('statusBarItem.errorBackground');
+            vscode.window.showErrorMessage('RigVe server has stopped or crashed');
+        } else {
+            runButton.text = "$(pass) RigVe Online";
+            runButton.backgroundColor = undefined;
+        }
+    }, 5000); // Check every 5 seconds
 }
 
-async function setRootDirectory() {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-  // vscode.window.showInformationMessage('Hello World from RigVe!');
-  let rDir = getRootDirPath();
-  const url = `http://localhost:3000/api/SetRootDir?dir=${rDir}`;
-  try {
-    const response = await axios.get(url);
-    // handle successful response
-  } catch (error) {
-    // handle error
-    console.error(error);
-  }
+function monitorEditorChanges(context: vscode.ExtensionContext): void {
+    vscode.window.onDidChangeActiveTextEditor(async (editor) => {
+        if (editor) {
+            const fileUri = editor.document.uri;
+            const rootPath = getRootDirPath();
+            const currentFileRelativePath = rootPath ? path.relative(rootPath, fileUri.fsPath) : fileUri.fsPath;
+            await trpc.rigve_current_file.mutate(currentFileRelativePath);
+        }
+    }, null, context.subscriptions);
+
+    vscode.workspace.onDidChangeTextDocument(async (event) => {
+        const fileUri = event.document.uri;
+        const rootPath = getRootDirPath();
+        const currentFileRelativePath = rootPath ? path.relative(rootPath, fileUri.fsPath) : fileUri.fsPath;
+        await trpc.rigve_current_file.mutate(currentFileRelativePath);
+    }, null, context.subscriptions);
 }
 
-// This method is called when your extension is deactivated
-export function deactivate() {
-  // disposable.dispose();
-  stopTimer();
+export function activate(context: vscode.ExtensionContext): void {
+    const nsDiagram = vscode.commands.registerCommand("RigVe.nsDiagram", handleNSDOption);
+
+    const runCommand = vscode.commands.registerCommand('RigVe.runServer', async () => {
+        const config = vscode.workspace.getConfiguration('RigVe');
+        const serverLocation = config.get<string>('serverLocation', '**/');
+        if (serverLocation === '**/') {
+            vscode.window.showErrorMessage('Please set the server location in the settings');
+            return;
+        }
+        
+        const executablePath = `cd ${serverLocation}; bash runme.sh`;
+        const terminal = vscode.window.createTerminal({
+            name: 'RigVe Server',
+            shellPath: '/bin/bash'
+        });
+        terminal.sendText(executablePath);
+        terminal.show();
+        
+        // Wait a bit for the server to start
+        await new Promise(resolve => setTimeout(resolve, 4000));
+        
+        const isRunning = await checkServerStatus();
+        if (isRunning) {
+            vscode.window.showInformationMessage('RigVe server started successfully');
+            runButton.text = "$(pass) RigVe Online";
+        } else {
+            vscode.window.showErrorMessage('Failed to start RigVe server');
+            runButton.text = "$(stop) RigVe Offline";
+            runButton.backgroundColor = new vscode.ThemeColor('statusBarItem.errorBackground');
+        }
+    });
+    
+    context.subscriptions.push(
+        nsDiagram,
+        runCommand
+    );
+    // Create a "Run" button in the status bar
+    const runButton = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 100);
+    runButton.text = "$(play) RigVe"; // Use a built-in icon with text
+    runButton.command = "RigVe.runServer"; // Command to execute on click
+    runButton.tooltip = "Run rigve server"; // Tooltip on hover
+    runButton.show();
+
+    startServerStatusMonitoring(runButton);
+    
+    context.subscriptions.push(runButton, {
+        dispose: () => {
+            if (serverCheckInterval) {
+                clearInterval(serverCheckInterval);
+            }
+        }
+    });
+
+    monitorEditorChanges(context);
+}
+
+export function deactivate(): void {
+    if (serverCheckInterval) {
+        clearInterval(serverCheckInterval);
+    }
 }

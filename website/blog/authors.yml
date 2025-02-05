@@ -1,0 +1,12 @@
+Raghava:
+  name: Raghava
+  title: RigVe Developer
+  url: https://raghava-ch.github.io/rigve-tool/
+  image_url: /img/raghava.jpg
+  page:
+    # customize the url of the author page at /blog/authors/<permalink>
+    permalink: '/all-raghava-articles'
+  socials:
+    x: raghava
+    linkedin: raghava
+    github: raghava

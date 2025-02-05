@@ -1,0 +1,8 @@
+{
+  "label": "Usage Guide",
+  "position": 5,
+  "link": {
+    "type": "generated-index",
+    "description": "You can learn about starting RigVe server and generating a diagrams from source code"
+  }
+}

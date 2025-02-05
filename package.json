@@ -1,8 +1,14 @@
 {
   "name": "rigve",
   "displayName": "rigve",
-  "description": "",
-  "version": "0.0.1",
+  "description": "Source code visualization tool",
+  "version": "1.0.0",
+  "publisher": "RigVe-tools",
+  "icon": "images/logo.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Raghava-Ch/RigVe.git"
+  },
   "engines": {
     "vscode": "^1.96.0"
   },
@@ -50,16 +56,16 @@
     "test": "node ./out/test/runTest.js"
   },
   "devDependencies": {
-    "@types/mocha": "^10.0.1",
-    "@types/node": "^22.10.2",
+    "@types/mocha": "10.0.10",
+    "@types/node": "22.10.10",
     "@types/vscode": "^1.96.0",
-    "@typescript-eslint/eslint-plugin": "8.18.1",
-    "@typescript-eslint/parser": "8.18.1",
+    "@typescript-eslint/eslint-plugin": "8.21.0",
+    "@typescript-eslint/parser": "8.21.0",
     "@vscode/test-electron": "^2.3.4",
-    "eslint": "9.17.0",
-    "glob": "11.0.0",
-    "mocha": "^10.2.0",
-    "typescript": "5.7.2"
+    "eslint": "9.19.0",
+    "glob": "11.0.1",
+    "mocha": "11.1.0",
+    "typescript": "5.7.3"
   },
   "dependencies": {
     "@trpc/client": "^10.45.2",

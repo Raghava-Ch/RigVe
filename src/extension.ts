@@ -17,6 +17,12 @@ async function checkServerStatus(): Promise<boolean> {
     }
 }
 
+enum ServerStatus {
+    TO_BE_STARTED = 0,
+    RUNNING = 1,
+    STOPPED = 2
+}
+let serverStatusShown: ServerStatus = ServerStatus.TO_BE_STARTED;
 function startServerStatusMonitoring(runButton: vscode.StatusBarItem) {
     // if (serverCheckInterval) {
     //     clearInterval(serverCheckInterval);
@@ -27,9 +33,18 @@ function startServerStatusMonitoring(runButton: vscode.StatusBarItem) {
         if (!isRunning) {
             runButton.text = "$(stop) RigVe Offline";
             runButton.backgroundColor = new vscode.ThemeColor('statusBarItem.errorBackground');
-            vscode.window.showErrorMessage('RigVe server has stopped or crashed');
+            if (serverStatusShown === ServerStatus.STOPPED) {
+                vscode.window.showErrorMessage('RigVe server is offline');
+                runButton.tooltip = ' (stopped)';
+                serverStatusShown = 1;
+            }
         } else {
+            if (serverStatusShown === ServerStatus.TO_BE_STARTED) {
+                vscode.window.showInformationMessage('RigVe server is online');
+            }
+            serverStatusShown = ServerStatus.RUNNING;
             runButton.text = "$(pass) RigVe Online";
+            runButton.tooltip = 'running';
             runButton.backgroundColor = undefined;
         }
     }, 5000); // Check every 5 seconds
@@ -64,10 +79,17 @@ export function activate(context: vscode.ExtensionContext): void {
             return;
         }
         
-        const executablePath = `cd ${serverLocation}; bash runme.sh`;
+        const platform = process.platform;
+        const executablePath = platform === 'win32'
+            ? `cd /D "${serverLocation}" && runme_win.bat`
+            : platform === 'darwin'
+            ? `cd "${serverLocation}"; zsh runme_mac.zsh`
+            : `cd "${serverLocation}"; bash runme_linux.sh`;
+            
         const terminal = vscode.window.createTerminal({
             name: 'RigVe Server',
-            shellPath: '/bin/bash'
+            // Use system default shell
+            shellPath: platform === 'win32' ? 'cmd.exe' : undefined
         });
         terminal.sendText(executablePath);
         terminal.show();

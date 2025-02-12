@@ -46,7 +46,11 @@ Your RigVe server is now configured and ready to use. 🚀
 4. Check the status bar for server connection status
 
 ## Troubleshooting
-If you encounter connection issues:
-1. Verify server paths are correct
-2. Check server service status
-3. Ensure firewall settings allow localhost connection
+
+If you encounter connection issues, please follow these steps:
+1. Verify Server Paths – Ensure that all server paths are correctly configured.
+2. Check Server Status – Confirm that the server service is running without errors.
+3. Firewall Settings – Make sure your firewall allows connections to localhost.
+4. **Mac Security Notice** – If you're using macOS, you may see a warning about an "untrusted application." This occurs because the executable is not yet notarized by Apple, as an official developer account is required. While I plan to obtain one in the future, you can still use the tool by following Apple's official steps to open untrusted apps: [Apple Support Guide](https://support.apple.com/en-in/guide/mac-help/mh40616/mac).
+
+I appreciate your understanding and support as I work towards full Apple certification.

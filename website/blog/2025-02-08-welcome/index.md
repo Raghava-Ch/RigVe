@@ -8,6 +8,8 @@ tags: [visualization]
 
 Source code visualization distills complex structures into comprehensible diagrams, making dependencies and interactions more evident. This clarity supports deeper insights and smoother collaboration, especially when presenting design decisions or onboarding new contributors.
 
+<!-- truncate -->
+
 ## Streamlined Collaboration
 
 • Developers rapidly trace intricate logic to spot bugs or performance bottlenecks.  

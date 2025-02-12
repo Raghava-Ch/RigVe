@@ -28,3 +28,26 @@
   --ifm-color-primary-lightest: #8c85ff;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
+
+.premium-button-container {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.premium-button {
+  display: inline-block;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #ff8c00, #ff3b3b);
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 8px;
+  text-decoration: none;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease-in-out;
+}
+
+.premium-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
+}

@@ -56,7 +56,7 @@ function monitorEditorChanges(context: vscode.ExtensionContext): void {
             const fileUri = editor.document.uri;
             const rootPath = getRootDirPath();
             const currentFileRelativePath = rootPath ? path.relative(rootPath, fileUri.fsPath) : fileUri.fsPath;
-            await trpc.rigve_current_file.mutate(currentFileRelativePath);
+            await trpc.rigve_current_file.mutate({prj_path: rootPath, file_path: currentFileRelativePath});
         }
     }, null, context.subscriptions);
 
@@ -64,7 +64,7 @@ function monitorEditorChanges(context: vscode.ExtensionContext): void {
         const fileUri = event.document.uri;
         const rootPath = getRootDirPath();
         const currentFileRelativePath = rootPath ? path.relative(rootPath, fileUri.fsPath) : fileUri.fsPath;
-        await trpc.rigve_current_file.mutate(currentFileRelativePath);
+        await trpc.rigve_current_file.mutate({prj_path: rootPath, file_path: currentFileRelativePath});
     }, null, context.subscriptions);
 }
 

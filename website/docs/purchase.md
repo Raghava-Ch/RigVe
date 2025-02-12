@@ -13,9 +13,10 @@ RigVe is available through Gumroad for **lifetime license**.
 - 30-day money-back guarantee
 
 ## Purchase Now
-<div class="purchase-buttons">
-    <a href="https://YOUR_GUMROAD_PERSONAL_LINK" class="button primary">Buy License</a>
+<div class="premium-button-container">
+    <a href="https://raghavista2.gumroad.com/l/rigve" class="premium-button">Buy License</a>
 </div>
+
 
 ## Frequently Asked Questions
 

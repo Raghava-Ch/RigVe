@@ -6,13 +6,16 @@ export const t = initTRPC.context<Context>().create();
 
 const protectedProcedure = t.procedure;
 
-const FILE_PATH_REGEX = /^(\/|([a-zA-Z]:)?(\\|\/))([^<>:"|?*]+(\\|\/)?)*[^<>:"|?*\s\\\/]$/;
+const FOLDER_PATH_REGEX = /^(\/|([a-zA-Z]:)?(\\|\/))([^<>:"|?*]+(\\|\/)?)*[^<>:"|?*\s\\\/]$/;
 const RELATIVE_FILE_PATH_REGEX = /^(?:\.{0,2}\/)?[\w\-. /\\]+\.[a-zA-Z0-9]+$/;
 
 export const appRouter = t.router({
     rigve_current_file:
         protectedProcedure
-            .input(z.string().regex(RELATIVE_FILE_PATH_REGEX))
+            .input(z.object({
+                prj_path: z.string().regex(FOLDER_PATH_REGEX),
+                file_path: z.string().regex(RELATIVE_FILE_PATH_REGEX)
+            }))
             .mutation(async ({ input, ctx }) => {
                 return { success: true };
             }),

@@ -23,6 +23,12 @@ function HomepageHeader() {
             to="/docs/intro">
             Get Started RigVe 🚀
           </Link>
+          <div style={{width:10}}></div>
+          <Link
+            className="button button--secondary button--lg"
+            to="https://raghavista2.gumroad.com/l/rigve">
+            Releasing on March 9, 2025
+          </Link>
         </div>
       </div>
     </header>
@@ -33,7 +39,7 @@ export default function Home(): ReactNode {
   const {siteConfig} = useDocusaurusContext();
   return (
     <Layout
-      title={`Hello from ${siteConfig.title}`}
+      title={`${siteConfig.title}`}
       description="Description will go into a meta tag in <head />">
       <HomepageHeader />
       <main>

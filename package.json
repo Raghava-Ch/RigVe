@@ -9,6 +9,7 @@
     "type": "git",
     "url": "https://github.com/Raghava-Ch/RigVe.git"
   },
+  "homepage": "https://raghava-ch.github.io/rigve-tool/",
   "engines": {
     "vscode": "^1.96.0"
   },
@@ -25,10 +26,15 @@
         "command": "RigVe.nsDiagram",
         "title": "Open NS Diagram",
         "category": "RigVe"
+      },
+      {
+        "command": "RigVe.cfgDiagram",
+        "title": "Open CFG Diagram",
+        "category": "RigVe"
       }
     ],
     "configuration": {
-      "title": "RigVe",
+      "title": "Rigve",
       "properties": {
         "RigVe.serverLocation": {
           "type": "string",
@@ -42,6 +48,11 @@
         {
           "command": "RigVe.nsDiagram",
           "when": "resourceLangId == c || resourceLangId == java",
+          "group": "Vnavigation"
+        },
+        {
+          "command": "RigVe.cfgDiagram",
+          "when": "resourceLangId == java",
           "group": "Vnavigation"
         }
       ]

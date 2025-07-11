@@ -5,6 +5,7 @@ import {
 } from "./utilities";
 import { handleNSDOption } from "./nsd";
 import { trpc } from "./lib/trpc/client";
+import { handleCFGOption } from "./cfg";
 
 let serverCheckInterval: NodeJS.Timeout | undefined;
 
@@ -70,6 +71,7 @@ function monitorEditorChanges(context: vscode.ExtensionContext): void {
 
 export function activate(context: vscode.ExtensionContext): void {
     const nsDiagram = vscode.commands.registerCommand("RigVe.nsDiagram", handleNSDOption);
+    const cfgDiagram = vscode.commands.registerCommand("RigVe.cfgDiagram", handleCFGOption);
 
     const runCommand = vscode.commands.registerCommand('RigVe.runServer', async () => {
         const config = vscode.workspace.getConfiguration('RigVe');
@@ -110,7 +112,8 @@ export function activate(context: vscode.ExtensionContext): void {
     
     context.subscriptions.push(
         nsDiagram,
-        runCommand
+        runCommand,
+        cfgDiagram
     );
     // Create a "Run" button in the status bar
     const runButton = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 100);

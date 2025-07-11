@@ -1,8 +1,8 @@
 import * as vscode from "vscode";
 import * as path from "path";
-import { getRootDirPath, getActiveFilePath, getWebviewContent } from "./utilities";
+import { getRootDirPath, getActiveFilePath, getWebviewContent, executeCommand } from "./utilities";
 
-export function handleNSDOption(context: vscode.ExtensionContext): void {
+export function handleCFGOption(context: vscode.ExtensionContext): void {
     const activeEditor = vscode.window.activeTextEditor;
     if (!activeEditor) {
         return;
@@ -15,10 +15,20 @@ export function handleNSDOption(context: vscode.ExtensionContext): void {
     const fnName = activeEditor.document.getText(selection);
 
     const panel = vscode.window.createWebviewPanel(
-        "RigVe",
+        "RigVeCFG",
         fnName,
         vscode.ViewColumn.One,
         { enableScripts: true }
+    );
+
+    // Handle messages from webview
+    panel.webview.onDidReceiveMessage(
+      async message => {
+        const information = await executeCommand(rootPath, message.command, message.information);
+        panel.webview.postMessage({ target: "iframe", command: 'uiGotCode', information: information });
+      },
+      undefined,
+      context.subscriptions
     );
 
     const rootPath = getRootDirPath();
@@ -29,7 +39,7 @@ export function handleNSDOption(context: vscode.ExtensionContext): void {
 
     const relativePath = path.relative(rootPath, currentFilePath);
     panel.webview.html = getWebviewContent(
-        "ns_diagram",
+        "cfg_diagram",
         rootPath,
         relativePath,
         fnName,

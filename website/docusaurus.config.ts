@@ -65,6 +65,10 @@ const config: Config = {
   ],
 
   themeConfig: {
+    // Declare some <meta> tags
+    metadata: [
+      {name: 'keywords', content: 'static-analysis, developer-tools, software-architecture, interactive-diagrams, code-visualization, program-structure, code-mapping, code-flow, code-insights, code-analysis-tools, code-dependency-analysis, code-debugging, c-code-visualizer, code-diagram-generator, source-code-diagrams'},
+    ],
     // Replace with your project's social card
     // image: 'img/docusaurus-social-card.jpg',
     navbar: {
@@ -144,6 +148,30 @@ const config: Config = {
       darkTheme: prismThemes.dracula,
     },
   } satisfies Preset.ThemeConfig,
+  headTags: [
+    // Declare a <link> preconnect tag
+    {
+      tagName: 'link',
+      attributes: {
+        rel: 'preconnect',
+        href: 'https://raghava-ch.github.io',
+      },
+    },
+    // Declare some json-ld structured data
+    // {
+    //   tagName: 'script',
+    //   attributes: {
+    //     type: 'application/ld+json',
+    //   },
+    //   innerHTML: JSON.stringify({
+    //     '@context': 'https://schema.org/',
+    //     '@type': 'Organization',
+    //     name: 'Meta Open Source',
+    //     url: 'https://opensource.fb.com/',
+    //     logo: 'https://opensource.fb.com/img/logos/Meta-Open-Source.svg',
+    //   }),
+    // },
+  ],
 };
 
 export default config;

@@ -13,6 +13,7 @@ RigVe is available through Gumroad for **lifetime license**.
 - 30-day money-back guarantee
 
 ## Purchase Now
+<p><strong>Exclusive Deal:</strong> First 99 Sales — <span style={{ color: "yellow" }}>Completely Free for Lifetime Use!</span> Use Coupon Code: <code style={{ color: "yellowgreen" }} >L7OQHM9</code></p>
 <div class="premium-button-container">
     <a href="https://raghavista2.gumroad.com/l/rigve" class="premium-button">Buy License</a>
 </div>

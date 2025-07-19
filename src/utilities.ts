@@ -99,8 +99,6 @@ export function getWebviewContent(
         end_byte: endByte.toString(),
     });
     const url = `${baseUrl}/${diagramApi}?${params.toString()}`;
-
-    console.log(url);
     return `
 <!DOCTYPE html>
 <html>
